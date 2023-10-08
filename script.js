@@ -50,7 +50,7 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
   // Define an array for the cell labels
   let cellLabels = [
     "SN",
-    "",
+    "Actions",
     "Description",
     "Unit",
     "No.s",
@@ -118,6 +118,7 @@ let cellContents = [
 ];
 
 function addSubRecord(element, recordTable, isLessRecord) {
+  subRecordCount = recordTable.querySelectorAll(".addInnerRecord").length
   let rowIndex = recordTable.querySelector(".table-footer").rowIndex;
   if (isLessRecord) {
     rowIndex = element.closest("tr").rowIndex + 1;
