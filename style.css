@@ -1,5 +1,7 @@
 /* Reset some default styles */
-body, h1, h2 {
+body,
+h1,
+h2 {
     margin: 0;
     padding: 0;
 }
@@ -47,10 +49,12 @@ button {
     font-size: 16px;
     margin-top: 10px;
 }
-h1{
+
+h1 {
     text-align: center;
-    
+
 }
+
 /* Table styles */
 table {
     width: 100%;
@@ -59,11 +63,14 @@ table {
     background: snow;
 }
 
-table, th, td {
+table,
+th,
+td {
     border: 1px solid #ccc;
 }
 
-th, td {
+th,
+td {
     padding: 10px;
     text-align: center;
 }
@@ -89,7 +96,8 @@ th {
 td select,
 td input[type="text"],
 td input[type="number"] {
-    width: 90%; /* Adjust this value as needed */
+    width: 90%;
+    /* Adjust this value as needed */
     padding: 8px;
     margin: auto;
     border-radius: 5px;
@@ -101,11 +109,11 @@ td input[type="number"] {
     font-size: large;
 }
 
-.top-part{
+.top-part {
     display: flex;
 }
 
-.project-total{
+.project-total {
     display: flex;
     width: 100%;
     align-items: center;
@@ -114,12 +122,26 @@ td input[type="number"] {
     padding: 20px;
 }
 
-.project-total .grand-total{
+.project-total .grand-total {
     color: #28a745;
     justify-content: center;
-    font-size: 80px;    
+    font-size: 80px;
 }
 
 .project-total h5 {
     font-size: 30px;
+}
+
+.table-footer {
+    font-weight: bold;
+    font-size: large;
+}
+
+.table-footer td,
+.subRecordTotal {
+    text-align: end;
+}
+
+.negativeValue {
+    color: maroon;
 }
