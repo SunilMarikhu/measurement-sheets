@@ -39,7 +39,7 @@ textarea {
 }
 
 /* Button style */
-button {
+#addRecordBtn {
     padding: 10px 20px;
     background-color: #007bff;
     color: #fff;
@@ -71,7 +71,7 @@ td {
 
 th,
 td {
-    padding: 10px;
+    padding: 1px;
     text-align: center;
 }
 
@@ -87,8 +87,17 @@ th {
     color: #fff;
     border: none;
     border-radius: 5px;
-    padding: 5px 10px;
+    padding: 10px 20px;
     margin-top: 10px;
+    cursor: pointer;
+}
+
+.addInnerRecordBtn {
+    background-color: maroon;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
     cursor: pointer;
 }
 
@@ -98,7 +107,7 @@ td input[type="text"],
 td input[type="number"] {
     width: 90%;
     /* Adjust this value as needed */
-    padding: 8px;
+    padding: 5px;
     margin: auto;
     border-radius: 5px;
     border: gray 1px solid;
@@ -109,29 +118,6 @@ td input[type="number"] {
     font-size: large;
 }
 
-.top-part {
-    display: flex;
-}
-
-.project-total {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    padding: 20px;
-}
-
-.project-total .grand-total {
-    color: #28a745;
-    justify-content: center;
-    font-size: 80px;
-}
-
-.project-total h5 {
-    font-size: 30px;
-}
-
 .table-footer {
     font-weight: bold;
     font-size: large;
@@ -140,6 +126,7 @@ td input[type="number"] {
 .table-footer td,
 .subRecordTotal {
     text-align: end;
+    padding: 5px 10px;
 }
 
 .negativeValue {

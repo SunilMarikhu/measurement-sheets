@@ -118,7 +118,7 @@ let cellContents = [
 ];
 
 function addSubRecord(element, recordTable, isLessRecord) {
-  subRecordCount = recordTable.querySelectorAll(".addInnerRecord").length
+  subRecordCount = recordTable.querySelectorAll(".addInnerRecordBtn").length
   let rowIndex = recordTable.querySelector(".table-footer").rowIndex;
   if (isLessRecord) {
     rowIndex = element.closest("tr").rowIndex + 1;
@@ -135,10 +135,10 @@ function addSubRecord(element, recordTable, isLessRecord) {
     subRecordCount++;
     cell0.textContent = `${subRecordCount}.`;
     //Create a add inner record button
-    cell1.innerHTML = '<button class="addInnerRecord">Add Less Records</button>';
+    cell1.innerHTML = '<button class="addInnerRecordBtn">Add Less Records</button>';
 
     subRecordRow
-      .querySelector(".addInnerRecord")
+      .querySelector(".addInnerRecordBtn")
       .addEventListener("click", function () {
         addSubRecord(this, recordTable, true)
       });
