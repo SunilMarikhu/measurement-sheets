@@ -1,4 +1,5 @@
 let recordsCount = 0;
+let subRecordCount = 0;
 
 document.getElementById("addRecordBtn").addEventListener("click", function () {
   recordsCount++;
@@ -15,7 +16,6 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
   // Create a new div element
   let newDiv = document.createElement("div");
 
-  // Set some attributes or properties if needed
   newDiv.id = `project-${recordsCount}`; // You can assign an ID to the div
   newDiv.className = "customDiv"; // You can assign a class to the div
 
@@ -31,25 +31,12 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
   recordTable.id = `table-${recordsCount}`
 
   // Add headers to the record table
-  let headerRow = recordTable.insertRow();
+  let headerRow = recordTable.insertRow(0);
   headerRow.classList.add("table-header");
 
   let headerCell1 = headerRow.insertCell(0);
   headerCell1.textContent = recordName;
   headerCell1.colSpan = 9;
-
-  // Add headers to the record table
-  let lastRow = recordTable.insertRow();
-  headerRow.classList.add("table-footer");
-
-  let lastRowCell1 = lastRow.insertCell(0);
-  let lastRowCell2 = lastRow.insertCell(1);
-
-  lastRowCell1.textContent = "Sub-Total";
-  lastRowCell2.textContent = "0";
-
-  lastRowCell1.colSpan = 8;
-  lastRowCell2.classList.add("recordTotal");
 
   // Add the record table to the container
   let recordTablesContainer = document.getElementById("recordTablesContainer");
@@ -58,7 +45,7 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
   newDiv.appendChild(addSubRecordBtn);
 
   // Create a new row for the record
-  let newRow = recordTable.insertRow();
+  let newRow = recordTable.insertRow(1);
 
   // Define an array for the cell labels
   let cellLabels = [
@@ -84,17 +71,32 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
 
   }
 
-  let row1 = recordTable.insertRow();
-  let dimensionCellLabels = ["Length", "Witdth", "Height"]
+  let dimensionCellLabels = ["Length", "Witdth", "Height"];
+  let dimensionRow = recordTable.insertRow(2);
   for (let i = 0; i < dimensionCellLabels.length; i++) {
-    let cell = row1.insertCell(i);
+    let cell = dimensionRow.insertCell(i);
     cell.textContent = dimensionCellLabels[i];
   }
+
+  // Add footers to the record table
+  let lastRow = recordTable.insertRow(3);
+  lastRow.classList.add("table-footer");
+
+  let lastRowCell1 = lastRow.insertCell(0);
+  let lastRowCell2 = lastRow.insertCell(1);
+
+  lastRowCell1.textContent = "Sub-Total";
+  lastRowCell2.textContent = "0";
+
+  lastRowCell1.colSpan = 8;
+  lastRowCell2.classList.add("recordTotal");
 
   // Add event listener to the new sub-record button
   newDiv
     .querySelector(".addSubRecordBtn")
-    .addEventListener("click", () => addSubRecord(recordTable, false));
+    .addEventListener("click", function () {
+      addSubRecord(this, recordTable, false)
+    });
 });
 
 // Define an array for the cell contents of sub-records
@@ -112,26 +114,35 @@ let cellContents = [
   '<input type="number" name="length" placeholder="Length" class="lengthInput" onkeyup="updateTotal(this)">',
   '<input type="number" name="width" placeholder="Width" class="widthInput" onkeyup="updateTotal(this)">',
   '<input type="number" name="height" placeholder="Height" class="heightInput" onkeyup="updateTotal(this)">',
-  '<span class="subRecordTotal"> 0 </span>',
+  '0',
 ];
 
-function addSubRecord(recordTable, isLessRecord) {
-  // Create a new row for a sub-record within the same record table
-  let subRecordRow = recordTable.insertRow();
+function addSubRecord(element, recordTable, isLessRecord) {
+  let rowIndex = recordTable.querySelector(".table-footer").rowIndex;
+  if (isLessRecord) {
+    rowIndex = element.closest("tr").rowIndex + 1;
+  }
+  // Create a new row for a sub-record within the same record table at specified index
+  let subRecordRow = recordTable.insertRow(rowIndex);
 
   // Set the first cell content with row index
   let cell0 = subRecordRow.insertCell(0);
-  cell0.textContent = `${subRecordRow.rowIndex - 3}.`;
-
   let cell1 = subRecordRow.insertCell(1);
 
+
   if (!isLessRecord) {
+    subRecordCount++;
+    cell0.textContent = `${subRecordCount}.`;
     //Create a add inner record button
     cell1.innerHTML = '<button class="addInnerRecord">Add Less Records</button>';
 
-    subRecordRow.querySelector(".addInnerRecord")
-      .addEventListener("click", () => addSubRecord(recordTable, true));
+    subRecordRow
+      .querySelector(".addInnerRecord")
+      .addEventListener("click", function () {
+        addSubRecord(this, recordTable, true)
+      });
   } else {
+    cell0.textContent = "-"
     cell1.textContent = "Less";
   }
 
@@ -139,6 +150,11 @@ function addSubRecord(recordTable, isLessRecord) {
   for (let i = 0; i < cellContents.length; i++) {
     let cell = subRecordRow.insertCell(i + 2);
     cell.innerHTML = cellContents[i];
+    if (i == cellContents.length - 1) {
+      cell.classList.add("subRecordTotal");
+      if (isLessRecord)
+        cell.classList.add("negativeValue")
+    }
   }
 
 
@@ -171,7 +187,8 @@ function updateTotal(input) {
     // Loop through the selected elements and add their values to the sum
     subRecordTotals.forEach(function (element) {
       // Parse the content of each element as a number and add it to the sum
-      sum += parseFloat(element.textContent);
+      let multiplier = element.classList.contains("negativeValue") ? -1 : 1;
+      sum += parseFloat(element.textContent) * multiplier;
     });
 
     let recordTotal = table.querySelector(".recordTotal");
