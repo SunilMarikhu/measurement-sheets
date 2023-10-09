@@ -118,6 +118,7 @@ let cellContents = [
 ];
 
 function addSubRecord(element, recordTable, isLessRecord) {
+  subRecordCount = recordTable.querySelectorAll(".addInnerRecord").length
   let rowIndex = recordTable.querySelector(".table-footer").rowIndex;
   if (isLessRecord) {
     rowIndex = element.closest("tr").rowIndex + 1;
