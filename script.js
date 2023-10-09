@@ -50,7 +50,7 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
   // Define an array for the cell labels
   let cellLabels = [
     "SN",
-    "",
+    "Actions",
     "Description",
     "Unit",
     "No.s",
