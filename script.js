@@ -4,27 +4,35 @@ let subRecordCount = 0;
 document.getElementById("addRecordBtn").addEventListener("click", function () {
   recordsCount++;
   // Prompt the user for record name and details
-  let recordName = prompt("Enter Record Name:");
+  // let recordName = prompt("Enter Record Name:");
 
-  if (!recordName) {
-    alert("Record Name cannot be empty. Please try again.");
-    return;
-  }
-  // let recordName = "ProjectName";
-  // let recordDetails = "Project Details";
+  // if (!recordName) {
+  //   alert("Record Name cannot be empty. Please try again.");
+  //   return;
+  // }
+  let recordName = "ProjectName";
 
   // Create a new div element
   let newDiv = document.createElement("div");
 
   newDiv.id = `project-${recordsCount}`; // You can assign an ID to the div
-  newDiv.className = "customDiv"; // You can assign a class to the div
-
 
   //Create a add sub record button
   let addSubRecordBtn = document.createElement("button");
   addSubRecordBtn.textContent = 'Add Measurement';
   addSubRecordBtn.classList.add("addSubRecordBtn");
   addSubRecordBtn.id = `addSubRecordBtn-${recordsCount}`;
+
+  // Define an array for the cell labels
+  let cellLabels = [
+    "SN",
+    "Description",
+    "Unit",
+    "No.s",
+    "Dimensions",
+    "Quantity",
+    "Actions",
+  ];
 
   // Create a new table for a record
   let recordTable = document.createElement("table");
@@ -36,7 +44,7 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
 
   let headerCell1 = headerRow.insertCell(0);
   headerCell1.textContent = recordName;
-  headerCell1.colSpan = 9;
+  headerCell1.colSpan = cellLabels.length + 2;
 
   // Add the record table to the container
   let recordTablesContainer = document.getElementById("recordTablesContainer");
@@ -47,27 +55,17 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
   // Create a new row for the record
   let newRow = recordTable.insertRow(1);
 
-  // Define an array for the cell labels
-  let cellLabels = [
-    "SN",
-    "Actions",
-    "Description",
-    "Unit",
-    "No.s",
-    "Dimensions",
-    "Quantity",
-
-  ];
-
   // Loop to create cells and set their text content
   for (let i = 0; i < cellLabels.length; i++) {
     let cell = newRow.insertCell(i);
     cell.textContent = cellLabels[i];
-    if (i === 5) {
+    if (cellLabels[i] === "Dimensions") {
       cell.colSpan = 3;
     } else {
       cell.rowSpan = 2;
     }
+    if (cellLabels[i] === "Actions")
+      cell.classList.add("lastColHeader");
 
   }
 
@@ -88,7 +86,7 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
   lastRowCell1.textContent = "Sub-Total";
   lastRowCell2.textContent = "0";
 
-  lastRowCell1.colSpan = 8;
+  lastRowCell1.colSpan = cellLabels.indexOf("Quantity") + 2;
   lastRowCell2.classList.add("recordTotal");
 
   // Add event listener to the new sub-record button
@@ -128,28 +126,10 @@ function addSubRecord(element, recordTable, isLessRecord) {
 
   // Set the first cell content with row index
   let cell0 = subRecordRow.insertCell(0);
-  let cell1 = subRecordRow.insertCell(1);
-
-
-  if (!isLessRecord) {
-    subRecordCount++;
-    cell0.textContent = `${subRecordCount}.`;
-    //Create a add inner record button
-    cell1.innerHTML = '<button class="addInnerRecordBtn">Add Less Records</button>';
-
-    subRecordRow
-      .querySelector(".addInnerRecordBtn")
-      .addEventListener("click", function () {
-        addSubRecord(this, recordTable, true)
-      });
-  } else {
-    cell0.textContent = "-"
-    cell1.textContent = "Less";
-  }
 
   // Loop through the array and create cells
   for (let i = 0; i < cellContents.length; i++) {
-    let cell = subRecordRow.insertCell(i + 2);
+    let cell = subRecordRow.insertCell(i + 1);
     cell.innerHTML = cellContents[i];
     if (i == cellContents.length - 1) {
       cell.classList.add("subRecordTotal");
@@ -158,7 +138,32 @@ function addSubRecord(element, recordTable, isLessRecord) {
     }
   }
 
+  let lastCell = subRecordRow.insertCell(cellContents.length + 1);
 
+  if (!isLessRecord) {
+    subRecordCount++;
+    cell0.textContent = `${subRecordCount}.`;
+    lastCell.innerHTML = '<button class="addInnerRecordBtn"> + Less</button>';
+  } else {
+    cell0.textContent = "-";
+  }
+  lastCell.innerHTML += '<button class="deleteSubRecordBtn"><img src="icons/trash_icon.svg" class="icons delete"></button>';
+  lastCell.classList.add("lastCol");
+
+  subRecordRow
+    .querySelector(".addInnerRecordBtn")
+    .addEventListener("click", function () {
+      addSubRecord(this, recordTable, true);
+    });
+
+  subRecordRow
+    .querySelector(".deleteSubRecordBtn")
+    .addEventListener("click", function () {
+      deleteConfirmation = confirm("Are you sure to delete this record?");
+      if (deleteConfirmation){
+        alert("Coming Soon...");
+      }
+    });
 }
 
 function calculateVolume(length, width, height) {
