@@ -4,7 +4,6 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
   recordsCount++;
   // Prompt the user for record name and details
   let recordName = prompt("Enter Record Name:");
-  let recordDetails = prompt("Enter Record Details:");
 
   if (!recordName) {
     alert("Record Name cannot be empty. Please try again.");
@@ -36,18 +35,21 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
   headerRow.classList.add("table-header");
 
   let headerCell1 = headerRow.insertCell(0);
-  let headerCell2 = headerRow.insertCell(1);
-  let headerCell3 = headerRow.insertCell(2);
-  let headerCell4 = headerRow.insertCell(3);
-
   headerCell1.textContent = recordName;
-  headerCell2.textContent = recordDetails;
-  headerCell3.textContent = "Sub-Total";
-  headerCell4.textContent = "0";
-  headerCell4.classList.add("recordTotal");
+  headerCell1.colSpan = 9;
 
+  // Add headers to the record table
+  let lastRow = recordTable.insertRow();
+  headerRow.classList.add("table-footer");
 
-  headerCell1.colSpan = 5;
+  let lastRowCell1 = lastRow.insertCell(0);
+  let lastRowCell2 = lastRow.insertCell(1);
+
+  lastRowCell1.textContent = "Sub-Total";
+  lastRowCell2.textContent = "0";
+
+  lastRowCell1.colSpan = 8;
+  lastRowCell2.classList.add("recordTotal");
 
   // Add the record table to the container
   let recordTablesContainer = document.getElementById("recordTablesContainer");
@@ -61,11 +63,12 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
   // Define an array for the cell labels
   let cellLabels = [
     "SN",
+    "",
+    "Description",
     "Unit",
     "No.s",
     "Dimensions",
     "Quantity",
-    "Sub-Total",
 
   ];
 
@@ -73,7 +76,7 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
   for (let i = 0; i < cellLabels.length; i++) {
     let cell = newRow.insertCell(i);
     cell.textContent = cellLabels[i];
-    if (i === 3) {
+    if (i === 5) {
       cell.colSpan = 3;
     } else {
       cell.rowSpan = 2;
@@ -88,41 +91,58 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
     cell.textContent = dimensionCellLabels[i];
   }
 
-
-  // Define an array for the cell contents of sub-records
-  let cellContents = [
-    '<select id="measurementUnit" name="measurementUnit">' +
-    '<option value="feet">Feet</option>' +
-    '<option value="inches">Inches</option>' +
-    '<option value="meters">Meters</option>' +
-    '<option value="centimeters">Centimeters</option>' +
-    '</select>',
-    '<input type="number" name="number" placeholder="No.s" class="numberInput" onkeyup="updateTotal(this)">',
-    '<input type="number" name="length" placeholder="Length" class="lengthInput" onkeyup="updateTotal(this)">',
-    '<input type="number" name="width" placeholder="Width" class="widthInput" onkeyup="updateTotal(this)">',
-    '<input type="number" name="height" placeholder="Height" class="heightInput" onkeyup="updateTotal(this)">',
-    '<input type="number" name="quantity" placeholder="Quantity" class="quantityInput" onkeyup="updateTotal(this)">',
-    '<span class="subRecordTotal"> 0 </span>',
-  ];
-
   // Add event listener to the new sub-record button
   newDiv
     .querySelector(".addSubRecordBtn")
-    .addEventListener("click", function () {
-      // Create a new row for a sub-record within the same record table
-      let subRecordRow = recordTable.insertRow();
-
-      // Set the first cell content with row index
-      let cell = subRecordRow.insertCell(0);
-      cell.textContent = `${subRecordRow.rowIndex - 2}.`;
-
-      // Loop through the array and create cells
-      for (let i = 0; i < cellContents.length; i++) {
-        let cell = subRecordRow.insertCell(i + 1);
-        cell.innerHTML = cellContents[i];
-      }
-    });
+    .addEventListener("click", () => addSubRecord(recordTable, false));
 });
+
+// Define an array for the cell contents of sub-records
+let cellContents = [
+  '<input type="text" name="description" placeholder="Description" class="descInput">',
+  '<select id="measurementUnit" name="measurementUnit">' +
+  '<option value="sq-ft">Sq. Ft.</option>' +
+  '<option value="sq-m">Sq. M</option>' +
+  '<option value="cu-ft">Cu. ft</option>' +
+  '<option value="cu-m">Cu. M</option>' +
+  '<option value="centimeters">R. Ft</option>' +
+  '<option value="centimeters">R. M</option>' +
+  '</select>',
+  '<input type="number" name="number" placeholder="No.s" class="numberInput" onkeyup="updateTotal(this)">',
+  '<input type="number" name="length" placeholder="Length" class="lengthInput" onkeyup="updateTotal(this)">',
+  '<input type="number" name="width" placeholder="Width" class="widthInput" onkeyup="updateTotal(this)">',
+  '<input type="number" name="height" placeholder="Height" class="heightInput" onkeyup="updateTotal(this)">',
+  '<span class="subRecordTotal"> 0 </span>',
+];
+
+function addSubRecord(recordTable, isLessRecord) {
+  // Create a new row for a sub-record within the same record table
+  let subRecordRow = recordTable.insertRow();
+
+  // Set the first cell content with row index
+  let cell0 = subRecordRow.insertCell(0);
+  cell0.textContent = `${subRecordRow.rowIndex - 3}.`;
+
+  let cell1 = subRecordRow.insertCell(1);
+
+  if (!isLessRecord) {
+    //Create a add inner record button
+    cell1.innerHTML = '<button class="addInnerRecord">Add Less Records</button>';
+
+    subRecordRow.querySelector(".addInnerRecord")
+      .addEventListener("click", () => addSubRecord(recordTable, true));
+  } else {
+    cell1.textContent = "Less";
+  }
+
+  // Loop through the array and create cells
+  for (let i = 0; i < cellContents.length; i++) {
+    let cell = subRecordRow.insertCell(i + 2);
+    cell.innerHTML = cellContents[i];
+  }
+
+
+}
 
 function calculateVolume(length, width, height) {
   return length * width * height;
@@ -135,9 +155,8 @@ function updateTotal(input) {
   let length = parseFloat(row.querySelector('input[name="length"]').value);
   let width = parseFloat(row.querySelector('input[name="width"]').value);
   let height = parseFloat(row.querySelector('input[name="height"]').value);
-  let quantity = parseFloat(row.querySelector('input[name="quantity"]').value);
   let volume = calculateVolume(length, width, height);
-  let total = volume * number * quantity
+  let total = volume * number;
 
   // Update the total field in the same row
   if (!isNaN(total)) {
@@ -157,17 +176,5 @@ function updateTotal(input) {
 
     let recordTotal = table.querySelector(".recordTotal");
     recordTotal.textContent = sum;
-
-    let recordTotals = document.querySelectorAll(".recordTotal");
-    let grandTotal = 0;
-
-    recordTotals.forEach(function (element) {
-      grandTotal += parseFloat(element.textContent);
-
-    });
-
-    let grandTotalText = document.querySelector(".grand-total");
-    grandTotalText.textContent = grandTotal;
-
   }
 }
