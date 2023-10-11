@@ -39,7 +39,7 @@ textarea {
 }
 
 /* Button style */
-button {
+#addRecordBtn {
     padding: 10px 20px;
     background-color: #007bff;
     color: #fff;
@@ -71,7 +71,7 @@ td {
 
 th,
 td {
-    padding: 10px;
+    padding: 1px;
     text-align: center;
 }
 
@@ -87,18 +87,46 @@ th {
     color: #fff;
     border: none;
     border-radius: 5px;
-    padding: 5px 10px;
+    padding: 10px 20px;
     margin-top: 10px;
     cursor: pointer;
 }
 
+.deleteSubRecordBtn {
+    background-color: maroon;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 20px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.addInnerRecordBtn {
+    background-color: teal;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
 /* Adjust cell widths for record inputs */
-td select,
 td input[type="text"],
 td input[type="number"] {
     width: 90%;
-    /* Adjust this value as needed */
-    padding: 8px;
+    height: 1.5rem;
+    padding: 5px;
+    margin: auto;
+    border-radius: 5px;
+    border: gray 1px solid;
+}
+
+td select {
+    width: 90%;
+    height: 2.2rem;
+    padding: 5px;
     margin: auto;
     border-radius: 5px;
     border: gray 1px solid;
@@ -107,29 +135,11 @@ td input[type="number"] {
 .table-header {
     font-weight: bold;
     font-size: large;
+    background: antiquewhite;
 }
 
-.top-part {
-    display: flex;
-}
-
-.project-total {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    padding: 20px;
-}
-
-.project-total .grand-total {
-    color: #28a745;
-    justify-content: center;
-    font-size: 80px;
-}
-
-.project-total h5 {
-    font-size: 30px;
+.table-header td {
+    padding: 10px;
 }
 
 .table-footer {
@@ -139,9 +149,29 @@ td input[type="number"] {
 
 .table-footer td,
 .subRecordTotal {
+    color: teal;
     text-align: end;
+    font-weight: 500;
+    font-size: larger;
+    padding: 5px 10px;
 }
 
 .negativeValue {
     color: maroon;
+}
+
+.lastColHeader {
+    width: 8%;
+}
+
+.lastCol {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding: 4px;
+}
+
+.icons {
+    height: 20px;
+    width: 20px;
 }
