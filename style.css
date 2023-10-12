@@ -38,16 +38,20 @@ textarea {
     font-size: 16px;
 }
 
-/* Button style */
-#addRecordBtn {
+.btn {
     padding: 10px 20px;
-    background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
+}
+
+.addRecordBtn {
+    background-color: #007bff;
+}
+
+.exportCsvBtn {
+    background-color: green;
 }
 
 h1 {
@@ -174,4 +178,14 @@ td select {
 .icons {
     height: 20px;
     width: 20px;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.btn-container {
+    padding: 10px;
+    margin: 10px;
+    gap: 20px;
 }
