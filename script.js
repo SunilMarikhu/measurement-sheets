@@ -250,3 +250,66 @@ function updateSerialNum(table) {
     cell.textContent = `${i + 1}.`;
   });
 }
+
+const headers = [
+  'SN',
+  'Description',
+  'No.s',
+  'Length',
+  'Width',
+  'Height',
+  'Quantity',
+  'Unit'
+];
+
+document.getElementById("exportCsvBtn").addEventListener("click", function () {
+  exportCsv();
+});
+
+function exportCsv() {
+  let mergedRow = '';
+  let tables = document.querySelectorAll('table');
+
+  let projectName = document.querySelector('input[name="projectName"]').value.trim() || 'New_Project'
+  mergedRow += ['', projectName, '\n'].join(',');
+  mergedRow += ['', document.querySelector('textArea[name="projectDetails"]').value, '\n\n'].join(',');
+
+  tables.forEach((table) => {
+    // Add Record title
+    mergedRow += ['', table.querySelector('tr.table-header td').textContent, '\n'].join(',');
+
+    // Add headers for Record
+    mergedRow += headers.join(',') + '\n';
+    let unit;
+    let subRecords = table.querySelectorAll('tr.subRecord, tr.innerRecord');
+    subRecords.forEach((subRecord) => {
+      let cells = subRecord.children;
+      let sn = cells[0].textContent;
+      let description = cells[1].firstChild.value;
+      let nos = cells[3].firstChild.value;
+      let length = cells[4].firstChild.value;
+      let width = cells[5].firstChild.value;
+      let height = cells[6].firstChild.value;
+      let quantity = (subRecord.classList.contains('innerRecord') ? '-' : '') + cells[7].textContent;
+      unit = cells[2].firstChild.value;
+
+      mergedRow += [sn, description, nos, length, width, height, quantity, unit, '\n'].join(',');
+    });
+
+    let subTotal = table.querySelector('td.recordTotal').textContent;
+    mergedRow += [...Array(5), 'Sub-Total', subTotal, unit, '\n\n'].join(',');
+
+  });
+
+  // Create a Blob object with the merged row
+  const blob = new Blob([mergedRow], { type: 'text/csv;charset=utf-8;' });
+
+  // Create a download link for the Blob
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+
+
+  link.download = `${projectName}_Measurement_Sheet.csv`;
+  document.body.appendChild(link);
+  link.click();
+}
