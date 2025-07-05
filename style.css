@@ -1,3 +1,20 @@
+/* Style to color PNG icons using CSS filter */
+
+.delete-icon {
+  transition: filter 0.4s;
+}
+
+/* #550000 maroon filter for PNG icons */
+.deleteRecordBtn .delete-icon,
+.deleteSubRecordBtn:hover .delete-icon {
+  filter: invert(13%) sepia(99%) saturate(2000%) hue-rotate(-18deg) brightness(60%) contrast(120%);
+}
+
+.deleteSubRecordBtn .delete-icon,
+.deleteRecordBtn:hover .delete-icon {
+  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+}
+
 /* Reset some default styles */
 body,
 h1,
@@ -96,14 +113,34 @@ th {
     cursor: pointer;
 }
 
-.deleteSubRecordBtn {
-    background-color: maroon;
-    color: #fff;
-    border: none;
+.deleteRecordBtn {
+    background-color: transparent;
+    color: maroon;
+    border: maroon 1px solid;
     border-radius: 5px;
     padding: 5px 20px;
     margin-left: 5px;
     cursor: pointer;
+}
+
+.deleteRecordBtn:hover {
+    background-color: maroon;
+    color: white;
+}
+
+.deleteSubRecordBtn {
+    background-color: maroon;
+    color: white;
+    border: maroon 1px solid;
+    border-radius: 5px;
+    padding: 5px 20px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.deleteSubRecordBtn:hover {
+    background-color: transparent;
+    color: maroon;
 }
 
 .addInnerRecordBtn {
