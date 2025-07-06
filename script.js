@@ -23,12 +23,17 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
   addSubRecordBtn.textContent = 'Add Measurement';
   addSubRecordBtn.classList.add("addSubRecordBtn");
 
+  // Create a delete record button
+  let deleteRecordBtn = document.createElement("button");
+  deleteRecordBtn.textContent = 'Delete Measurement Block';
+  deleteRecordBtn.classList.add("deleteRecordBtn");
+
   // Define an array for the cell labels
   let cellLabels = [
     "SN",
     "Description",
-    "Unit",
     "No.s",
+    "Unit",
     "Dimensions",
     "Quantity",
     "Actions",
@@ -37,19 +42,42 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
   // Create a new table for a record
   let recordTable = document.createElement("table");
 
+
   // Add headers to the record table
   let headerRow = recordTable.insertRow(0);
   headerRow.classList.add("table-header");
 
+
+  // Create two cells: one for the title (centered), one for the delete button (right)
   let headerCell1 = headerRow.insertCell(0);
-  headerCell1.textContent = recordName;
-  headerCell1.colSpan = cellLabels.length + 2;
+  let headerCell2 = headerRow.insertCell(1);
+
+  // Title cell (centered)
+  headerCell1.colSpan = cellLabels.length + 1;
+  headerCell1.style.textAlign = 'center';
+  let recordNameSpan = document.createElement('span');
+  recordNameSpan.textContent = recordName;
+  headerCell1.appendChild(recordNameSpan);
+
+  // Delete button cell (right, styled like row delete, full width, outlined, red)
+  headerCell2.style.textAlign = 'right';
+  headerCell2.style.verticalAlign = 'middle';
+  headerCell2.style.width = '1%';
+  deleteRecordBtn.innerHTML = '<img src="icons/delete.png" class="icons delete-icon">';
+  deleteRecordBtn.className = 'deleteRecordBtn';
+  headerCell2.appendChild(deleteRecordBtn);
 
   // Add the record table to the container
   let recordTablesContainer = document.getElementById("recordTablesContainer");
   recordTablesContainer.appendChild(newDiv);
   newDiv.appendChild(recordTable);
   newDiv.appendChild(addSubRecordBtn);
+  // Add event listener to the delete record button
+  deleteRecordBtn.addEventListener("click", function () {
+    if (confirm("Are you sure you want to delete this measurement block?")) {
+      newDiv.remove();
+    }
+  });
 
   // Create a new row for the record
   let newRow = recordTable.insertRow(1);
@@ -99,6 +127,7 @@ document.getElementById("addRecordBtn").addEventListener("click", function () {
 // Define an array for the cell contents of sub-records
 let cellContents = [
   '<input type="text" name="description" placeholder="Description" class="descInput">',
+  '<input value="0" type="number" name="number" placeholder="No.s" class="numberInput" onkeyup="updateTotal(this)">',
   '<select name="measurementUnit">' +
   '<option value="sq-ft">Sq. Ft.</option>' +
   '<option value="sq-m">Sq. M</option>' +
@@ -107,10 +136,9 @@ let cellContents = [
   '<option value="centimeters">R. Ft</option>' +
   '<option value="centimeters">R. M</option>' +
   '</select>',
-  '<input value="0" type="number" name="number" placeholder="No.s" class="numberInput" onkeyup="updateTotal(this)">',
-  '<input value="1" type="number" name="length" placeholder="Length" class="lengthInput" onkeyup="updateTotal(this)">',
-  '<input value="1" type="number" name="width" placeholder="Width" class="widthInput" onkeyup="updateTotal(this)">',
-  '<input value="1" type="number" name="height" placeholder="Height" class="heightInput" onkeyup="updateTotal(this)">',
+  '<input type="number" name="length" placeholder="Length" class="lengthInput" onkeyup="updateTotal(this)">',
+  '<input type="number" name="width" placeholder="Width" class="widthInput" onkeyup="updateTotal(this)">',
+  '<input type="number" name="height" placeholder="Height" class="heightInput" onkeyup="updateTotal(this)">',
   '0',
 ];
 
@@ -151,7 +179,7 @@ function addSubRecord(element, recordTable, isLessRecord, targetRowIndex = undef
     cell0.textContent = "-";
   }
 
-  lastCell.innerHTML += '<button class="deleteSubRecordBtn"><img src="icons/trash_icon.svg" class="icons delete"></button>';
+  lastCell.innerHTML += '<button class="deleteSubRecordBtn"><img src="icons/delete.png" class="icons delete-icon"></button>';
   lastCell.classList.add("lastCol");
 
   subRecordRow
@@ -214,13 +242,27 @@ function updateTotal(input) {
   let length = parseFloat(row.querySelector('input[name="length"]').value);
   let width = parseFloat(row.querySelector('input[name="width"]').value);
   let height = parseFloat(row.querySelector('input[name="height"]').value);
+
+  // If all l, w, h are empty or zero, total is 0 (but do not fill 0 in the input fields)
+  const allEmptyOrZero = (isNaN(length) || length === 0) && (isNaN(width) || width === 0) && (isNaN(height) || height === 0);
+  if (allEmptyOrZero) {
+    row.querySelector('.subRecordTotal').textContent = 0;
+    let table = row.closest("table");
+    updateSubTotal(table);
+    return;
+  }
+
+  // If any l, w, h is filled, treat empty/zero as 1 for calculation (do not update input fields)
+  if (isNaN(length) || length === 0) length = 1;
+  if (isNaN(width) || width === 0) width = 1;
+  if (isNaN(height) || height === 0) height = 1;
+
   let volume = calculateVolume(length, width, height);
   let total = volume * number;
 
   // Update the total field in the same row
   if (!isNaN(total)) {
     row.querySelector('.subRecordTotal').textContent = total;
-
     let table = row.closest("table");
     updateSubTotal(table);
   }
@@ -255,11 +297,11 @@ const headers = [
   'SN',
   'Description',
   'No.s',
+  'Unit',
   'Length',
   'Width',
   'Height',
-  'Quantity',
-  'Unit'
+  'Quantity'
 ];
 
 document.getElementById("exportCsvBtn").addEventListener("click", function () {
@@ -286,14 +328,14 @@ function exportCsv() {
       let cells = subRecord.children;
       let sn = cells[0].textContent;
       let description = cells[1].firstChild.value;
-      let nos = cells[3].firstChild.value;
+      let nos = cells[2].firstChild.value;
+      let unit = cells[3].firstChild.value;
       let length = cells[4].firstChild.value;
       let width = cells[5].firstChild.value;
       let height = cells[6].firstChild.value;
       let quantity = (subRecord.classList.contains('innerRecord') ? '-' : '') + cells[7].textContent;
-      unit = cells[2].firstChild.value;
 
-      mergedRow += [sn, description, nos, length, width, height, quantity, unit, '\n'].join(',');
+      mergedRow += [sn, description, nos, unit, length, width, height, quantity, '\n'].join(',');
     });
 
     let subTotal = table.querySelector('td.recordTotal').textContent;
