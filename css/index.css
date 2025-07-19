@@ -226,3 +226,54 @@ td select {
     margin: 10px;
     gap: 20px;
 }
+
+/* Style for editable record title */
+.recordTitleInput {
+    font-size: larger;
+    font-weight: bold;
+    text-align: left;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border: none;
+    background: transparent;
+    outline: none;
+}
+
+.recordTitleInput::placeholder {
+    color: #888;
+}
+
+/* When the title input is focused, add a subtle bottom border for user feedback */
+.recordTitleInput:focus {
+    border-bottom: 2px solid teal;
+}
+
+.recordTitleWrapper {
+    width: 100%;
+    display: block;
+}
+
+.recordUnitSelect {
+    font-weight: bold;
+    text-align: left;
+    width: auto;
+    max-width: auto;
+    margin: 0;
+    background: transparent;
+    padding: 4px 8px;
+}
+
+.recordUnitSelect:focus {
+    border-bottom: 2px solid teal;
+}
+
+.footerUnit {
+    color: teal;
+    text-align: center;
+    font-weight: 500;
+    font-size: larger;
+    padding: 5px 10px;
+    width: 1%;
+    white-space: nowrap;
+}
