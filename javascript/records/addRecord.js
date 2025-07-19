@@ -33,7 +33,7 @@ export function addRecord() {
   const recordNameInput = document.createElement('input');
   recordNameInput.type = 'text';
   recordNameInput.classList.add('recordTitleInput');
-  recordNameInput.placeholder = 'Record Title';
+  recordNameInput.placeholder = `Record-${recordsCount}`;
   recordNameInput.id = generateUniqueId('recordTitle');
   recordNameInput.style.width = '100%';
   recordNameInput.style.maxWidth = '99%';
@@ -69,7 +69,7 @@ export function addRecord() {
 
   // Place in DOM
   const container = document.getElementById('recordTablesContainer');
-  container.appendChild(newDiv);
+  container.prepend(newDiv);
   newDiv.appendChild(recordTable);
   newDiv.appendChild(addSubBtn);
 
