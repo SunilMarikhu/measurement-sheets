@@ -1,5 +1,5 @@
 import { SUB_RECORD_NUM, cellContents } from '../constants.js';
-import { updateSubTotal, updateSerialNum, getNewRowIndex, updateTotal, generateUniqueId } from '../utils.js';
+import { updateSerialNum, getNewRowIndex, updateTotal, generateUniqueId } from '../utils.js';
 import { removeRow } from './removeRow.js';
 
 export function addSubRecord(element, recordTable, isLessRecord = false, targetRowIndex = undefined) {
