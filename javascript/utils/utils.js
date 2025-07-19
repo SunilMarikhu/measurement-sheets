@@ -64,3 +64,12 @@ export function generateUniqueId(prefix) {
 }
 
 // No global exposure necessary now that inline handlers are gone. 
+
+// Function to get the correct icon path using absolute path
+export function getIconPath(iconName) {
+  // Get the base URL (protocol + hostname + port)
+  const baseUrl = window.location.origin;
+  
+  // Construct absolute path to images/icons
+  return `${baseUrl}/images/icons/${iconName}`;
+} 

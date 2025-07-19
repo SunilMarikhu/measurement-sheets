@@ -1,6 +1,6 @@
-import { cellLabels, dimensionCellLabels, unitOptions } from '../constants.js';
+import { cellLabels, dimensionCellLabels, unitOptions } from '../utils/constants.js';
 import { addSubRecord } from './addSubRecord.js';
-import { generateUniqueId } from '../utils.js';
+import { generateUniqueId, getIconPath } from '../utils/utils.js';
 
 let recordsCount = 0;
 
@@ -14,7 +14,7 @@ export function addRecord() {
   addSubBtn.classList.add('addSubRecordBtn');
 
   const deleteRecordBtn = document.createElement('button');
-  deleteRecordBtn.innerHTML = '<img src="icons/delete.png" class="icons delete-icon">';
+  deleteRecordBtn.innerHTML = `<img src="${getIconPath('delete.png')}" class="icons delete-icon">`;
   deleteRecordBtn.classList.add('deleteRecordBtn');
 
   const recordTable = document.createElement('table');

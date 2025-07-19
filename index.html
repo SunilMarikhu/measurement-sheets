@@ -3,42 +3,98 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Project Management</title>
-        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <title>Measurement Sheets - Professional Measurement Tool</title>
+        <link rel="stylesheet" type="text/css" href="css/layouts/index.css">
+        <link rel="stylesheet" type="text/css" href="css/layouts/welcome.css">
+        <link rel="stylesheet" type="text/css" href="css/components/navigation.css">
     </head>
     <body>
-        <h1>Measurement Sheet</h1><br />
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="index.html" class="nav-brand">
+                    <span class="nav-brand-icon">📏</span>
+                    Measurement Sheets
+                </a>
+                <a href="projects/" class="nav-link">Projects</a>
+            </div>
+        </nav>
 
-        <!-- Project Information -->
-        <div class="project-details">
-            <h2>Project Details</h2><br />
-            <!-- <label for="projectName">Project Name:</label><br /> -->
-            <input
-                type="text"
-                id="projectName"
-                name="projectName"
-                placeholder="Enter Project Name" /><br /><br />
-
-            <!-- <label for="projectDetails">Project Details:</label><br /> -->
-            <textarea
-                id="projectDetails"
-                name="projectDetails"
-                rows="4"
-                cols="50"
-                placeholder="Enter Project Details"></textarea>
+        <div class="main-content">
+            <div class="welcome-container">
+            <h1 class="welcome-title">📏 Measurement Sheets</h1>
+            <p class="welcome-subtitle">
+                Professional measurement and calculation tool for construction and renovation projects
+            </p>
+            <p class="welcome-description">
+                Create detailed measurement records, calculate areas and volumes, 
+                manage multiple projects, and export data to CSV format. 
+                Perfect for contractors, architects, and DIY enthusiasts.
+            </p>
+            
+            <div class="cta-buttons">
+                <a href="projects/projects.html" class="cta-btn primary-btn">
+                    🚀 Get Started
+                </a>
+            </div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Unlimited Projects</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">📊</span>
+                    <span class="stat-label">Real-time Calculations</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">📤</span>
+                    <span class="stat-label">CSV Export</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">💾</span>
+                    <span class="stat-label">Data Persistence</span>
+                </div>
+            </div>
+            
+            <div class="features">
+                <div class="feature">
+                    <span class="feature-icon">📋</span>
+                    <h3>Multiple Projects</h3>
+                    <p>Create and manage multiple measurement projects with organized data storage. Each project can have its own records and calculations.</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">📊</span>
+                    <h3>Detailed Records</h3>
+                    <p>Add comprehensive measurement records with length, width, height, descriptions, and custom units of measurement.</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🧮</span>
+                    <h3>Auto Calculations</h3>
+                    <p>Automatic calculation of areas, volumes, and totals with real-time updates as you enter measurements.</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">📤</span>
+                    <h3>CSV Export</h3>
+                    <p>Export all measurement data to CSV format for further analysis, reporting, and integration with other tools.</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">💾</span>
+                    <h3>Data Persistence</h3>
+                    <p>Save and load projects with full data persistence using the API backend. Never lose your work again.</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">📱</span>
+                    <h3>Responsive Design</h3>
+                    <p>Works seamlessly on desktop, tablet, and mobile devices. Access your measurements anywhere, anytime.</p>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>Built with modern web technologies • Open source • Free to use</p>
+                <p>Perfect for contractors, architects, engineers, and DIY enthusiasts</p>
+            </div>
         </div>
-
-        <div class="d-flex btn-container">
-             <!-- Button to add a new record -->
-             <button id="addRecordBtn" class="btn addRecordBtn">Add New Record</button>
-             <button id="exportCsvBtn" class="btn exportCsvBtn">Export CSV</button>
-
         </div>
-
-        <!-- Container to hold multiple record tables -->
-        <div id="recordTablesContainer"></div>
-
-        <!-- Include the application entry point -->
-        <script type="module" src="javascript/index.js"></script>
     </body>
-</html>
+</html> 

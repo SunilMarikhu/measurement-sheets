@@ -1,3 +1,64 @@
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    margin-bottom: 20px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.back-btn {
+    background-color: transparent;
+    color: #6c757d;
+    padding: 8px 16px;
+    border: 2px solid #6c757d;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+    background-color: rgba(108, 117, 125, 0.1);
+}
+
+.save-btn {
+    background-color: transparent;
+    color: #28a745;
+    padding: 10px 20px;
+    border: 2px solid #28a745;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.save-btn:hover {
+    background-color: rgba(40, 167, 69, 0.1);
+}
+
+.save-btn:disabled {
+    background-color: transparent;
+    color: #6c757d;
+    border-color: #6c757d;
+    cursor: not-allowed;
+}
+
 /* Style to color PNG icons using CSS filter */
 
 .delete-icon {
@@ -26,49 +87,37 @@ h2 {
 body {
     font-family: Arial, sans-serif;
     background-color: #f5f5f5;
-    padding: 20px;
 }
 
 h1 {
     color: #333;
 }
 
-/* Container for the project details */
-.project-details {
-    background-color: snow;
-    padding: 20px;
-    border-radius: 5px;
-    max-width: 540px;
-    align-items: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Input and textarea styles */
-input[type="text"],
-textarea {
-    width: 98%;
-    max-width: 500px;
-    padding: 10px;
-    margin: auto;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
 .btn {
     padding: 10px 20px;
-    color: #fff;
-    border: none;
+    border: 2px solid;
     border-radius: 5px;
     cursor: pointer;
+    background-color: transparent;
+    transition: all 0.2s ease;
 }
 
 .addRecordBtn {
-    background-color: #007bff;
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.addRecordBtn:hover {
+    background-color: rgba(0, 123, 255, 0.1);
 }
 
 .exportCsvBtn {
-    background-color: green;
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.exportCsvBtn:hover {
+    background-color: rgba(40, 167, 69, 0.1);
 }
 
 h1 {
@@ -104,13 +153,18 @@ th {
 
 /* Style for the "Add Sub-Record" button */
 .addSubRecordBtn {
-    background-color: #28a745;
-    color: #fff;
-    border: none;
+    background-color: transparent;
+    color: #28a745;
+    border: 2px solid #28a745;
     border-radius: 5px;
     padding: 10px 20px;
     margin-top: 10px;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.addSubRecordBtn:hover {
+    background-color: rgba(40, 167, 69, 0.1);
 }
 
 .deleteRecordBtn {
@@ -144,13 +198,18 @@ th {
 }
 
 .addInnerRecordBtn {
-    background-color: teal;
-    color: #fff;
-    border: none;
+    background-color: transparent;
+    color: teal;
+    border: 2px solid teal;
     border-radius: 5px;
     padding: 10px;
     margin-right: 5px;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.addInnerRecordBtn:hover {
+    background-color: rgba(0, 128, 128, 0.1);
 }
 
 /* Adjust cell widths for record inputs */
@@ -222,8 +281,8 @@ td select {
 }
 
 .btn-container {
-    padding: 10px;
-    margin: 10px;
+    padding: 10px 20px;
+    margin: 0;
     gap: 20px;
 }
 

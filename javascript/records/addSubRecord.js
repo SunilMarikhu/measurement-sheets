@@ -1,5 +1,5 @@
-import { SUB_RECORD_NUM, cellContents } from '../constants.js';
-import { updateSerialNum, getNewRowIndex, updateTotal, generateUniqueId } from '../utils.js';
+import { SUB_RECORD_NUM, cellContents } from '../utils/constants.js';
+import { updateSerialNum, getNewRowIndex, updateTotal, generateUniqueId, getIconPath } from '../utils/utils.js';
 import { removeRow } from './removeRow.js';
 
 export function addSubRecord(element, recordTable, isLessRecord = false, targetRowIndex = undefined) {
@@ -44,7 +44,7 @@ export function addSubRecord(element, recordTable, isLessRecord = false, targetR
   } else {
     cell0.textContent = '-';
   }
-  lastCell.innerHTML += '<button class="deleteSubRecordBtn"><img src="icons/delete.png" class="icons delete-icon"></button>';
+  lastCell.innerHTML += `<button class="deleteSubRecordBtn"><img src="${getIconPath('delete.png')}" class="icons delete-icon"></button>`;
   lastCell.classList.add('lastCol');
 
   // Event handlers
