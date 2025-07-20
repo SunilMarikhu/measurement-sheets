@@ -2,7 +2,9 @@ import { SUB_RECORD_NUM, cellContents } from '../utils/constants.js';
 import { updateSerialNum, getNewRowIndex, updateTotal, generateUniqueId, getIconPath } from '../utils/utils.js';
 import { removeRow } from './removeRow.js';
 
-export function addSubRecord(element, recordTable, isLessRecord = false, targetRowIndex = undefined) {
+let subRecordGlobalId = 1;
+
+export function addSubRecord(element, recordTable, isLessRecord = false, targetRowIndex = undefined, subRecordId = undefined) {
   let subRecordCount = recordTable.querySelectorAll('.serialNumber').length;
   let subRecordNum   = subRecordCount;
   const rowIndex     = targetRowIndex ?? recordTable.querySelector('.table-footer').rowIndex;
@@ -14,6 +16,8 @@ export function addSubRecord(element, recordTable, isLessRecord = false, targetR
   const subRecordRow = recordTable.insertRow(rowIndex);
   subRecordRow.setAttribute(SUB_RECORD_NUM, subRecordNum);
   subRecordRow.classList.add(isLessRecord ? 'innerRecord' : 'subRecord');
+  // Assign a unique integer id to each sub-record, or use provided id
+  subRecordRow.dataset.subrecordId = subRecordId !== undefined ? subRecordId : subRecordGlobalId++;
 
   // First cell (serial number or dash)
   const cell0 = subRecordRow.insertCell(0);
@@ -38,13 +42,13 @@ export function addSubRecord(element, recordTable, isLessRecord = false, targetR
   const lastCell = subRecordRow.insertCell(cellContents.length + 1);
   if (!isLessRecord) {
     subRecordCount++;
-    cell0.textContent = `${subRecordCount}.`;
+    cell0.textContent = `${subRecordCount}`;
     cell0.classList.add('serialNumber');
     lastCell.innerHTML = '<button class="btn btn-sm btn-outline-secondary w-auto text-nowrap addInnerRecordBtn"> + Less</button>';
   } else {
     cell0.textContent = '-';
   }
-  lastCell.innerHTML += `<button class="btn btn-sm btn-danger ms-1"><img src="${getIconPath('delete.png')}" class="icons delete-icon"></button>`;
+  lastCell.innerHTML += `<button class="btn btn-sm btn-danger ms-1 deleteSubRecordBtn"><img src="${getIconPath('delete.png')}" class="icons delete-icon"></button>`;
   lastCell.classList.add('lastCol');
 
   // Event handlers
