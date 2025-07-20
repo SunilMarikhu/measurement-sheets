@@ -37,6 +37,7 @@ class ProjectManager {
 
   updateProjectList() {
     const select = document.getElementById('projectSelect');
+    if (!select) return;
     const currentValue = select.value;
     
     // Clear existing options except the first one
@@ -135,6 +136,9 @@ class ProjectManager {
       // Load project data into the form
       document.querySelector('input[name="projectName"]').value = project.name || '';
       document.querySelector('textarea[name="projectDetails"]').value = project.details || '';
+
+      // Render records from API
+      projectAPI.loadProjectData(project);
       
       // Enable save button
       const saveBtn = document.getElementById('saveProjectBtn');

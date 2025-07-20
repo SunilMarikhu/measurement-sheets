@@ -1,4 +1,5 @@
-const API_BASE_URL = 'http://localhost:3000/api';
+// const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'https://measurement-sheets-backend.onrender.com/api';
 
 class ProjectAPI {
   constructor() {
@@ -128,10 +129,11 @@ class ProjectAPI {
     
     // Load records
     if (projectData.records && projectData.records.length > 0) {
-      projectData.records.forEach(record => {
-        // This would need to be integrated with the existing addRecord function
-        // For now, we'll just store the data for manual loading
-        console.log('Loading record:', record);
+      // Dynamically import addRecordFromData to avoid circular dependency
+      import('../records/addRecord.js').then(module => {
+        projectData.records.forEach(record => {
+          module.addRecordFromData(record);
+        });
       });
     }
   }

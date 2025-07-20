@@ -39,29 +39,31 @@ class ProjectsIndex {
     try {
       this.projects = await projectAPI.getProjects();
       this.renderProjects();
+      // Hide loading spinner
+      const loading = document.querySelector('#projectsContent .loading');
+      if (loading) loading.style.display = 'none';
     } catch (error) {
       console.error('Failed to load projects:', error);
       this.showError('Failed to load projects. Please try again.');
+      // Hide loading spinner on error as well
+      const loading = document.querySelector('#projectsContent .loading');
+      if (loading) loading.style.display = 'none';
     }
   }
 
   renderProjects() {
     const container = document.getElementById('projectsContent');
+    const emptyState = document.getElementById('emptyState');
     
     if (this.projects.length === 0) {
-      container.innerHTML = `
-        <div class="empty-state">
-          <h3>No projects yet</h3>
-          <p>Create your first measurement project to get started.</p>
-          <button id="createFirstProjectBtn" class="new-project-btn">Create Project</button>
-        </div>
-      `;
-      
-      // Add event listener for the create button in empty state
-      document.getElementById('createFirstProjectBtn')?.addEventListener('click', () => {
-        this.showNewProjectModal();
-      });
+      // Hide projects grid, show empty state
+      if (emptyState) emptyState.style.display = '';
+      // Remove any projects grid if present
+      const grid = container.querySelector('.projects-grid');
+      if (grid) grid.remove();
       return;
+    } else {
+      if (emptyState) emptyState.style.display = 'none';
     }
 
     // Sort projects by updated date (newest first)
@@ -71,11 +73,13 @@ class ProjectsIndex {
 
     const projectsHTML = sortedProjects.map(project => this.createProjectCard(project)).join('');
     
-    container.innerHTML = `
-      <div class="projects-grid">
-        ${projectsHTML}
-      </div>
-    `;
+    // Remove any previous grid and insert new
+    const oldGrid = container.querySelector('.projects-grid');
+    if (oldGrid) oldGrid.remove();
+    const gridDiv = document.createElement('div');
+    gridDiv.className = 'projects-grid';
+    gridDiv.innerHTML = projectsHTML;
+    container.appendChild(gridDiv);
 
     // Add event listeners to project cards
     this.addProjectCardListeners();
