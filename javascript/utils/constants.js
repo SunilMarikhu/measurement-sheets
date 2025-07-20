@@ -27,7 +27,8 @@ export const headers = [
   'Length',
   'Width',
   'Height',
-  'Quantity'
+  'Quantity',
+  'Unit'
 ];
 
 export const unitOptions = [
