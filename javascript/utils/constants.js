@@ -24,7 +24,6 @@ export const headers = [
   'SN',
   'Description',
   'No.s',
-  'Unit',
   'Length',
   'Width',
   'Height',

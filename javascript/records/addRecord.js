@@ -149,7 +149,8 @@ function populateSubRecords(table, subRecords) {
     if (cells[3].querySelector('input')) cells[3].querySelector('input').value = subRecord.length || '';
     if (cells[4].querySelector('input')) cells[4].querySelector('input').value = subRecord.width || '';
     if (cells[5].querySelector('input')) cells[5].querySelector('input').value = subRecord.height || '';
-    // cells[6] is quantity (auto-calculated)
+    // Set quantity if present in API data
+    if (typeof subRecord.quantity !== 'undefined') cells[6].textContent = subRecord.quantity;
     cells[1].querySelector('input').className = 'form-control form-control-sm px-2 py-1';
     cells[2].querySelector('input').className = 'form-control form-control-sm px-2 py-1';
     cells[3].querySelector('input').className = 'form-control form-control-sm px-2 py-1';
@@ -210,5 +211,10 @@ export function addRecordFromData(recordData) {
   // Add sub-records from data
   if (recordData.subRecords && Array.isArray(recordData.subRecords)) {
     populateSubRecords(table, recordData.subRecords);
+  }
+  // Set subtotal if present in API data
+  if (typeof recordData.subTotal !== 'undefined') {
+    const subTotalCell = table.querySelector('td.recordTotal');
+    if (subTotalCell) subTotalCell.textContent = recordData.subTotal;
   }
 } 

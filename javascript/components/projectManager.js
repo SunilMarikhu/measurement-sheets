@@ -8,7 +8,11 @@ class ProjectManager {
   }
 
   async init() {
-    await this.loadProjects();
+    // Only load projects if not on the show page
+    const isShowPage = window.location.pathname.includes('show.html');
+    if (!isShowPage) {
+      await this.loadProjects();
+    }
     this.createProjectSelector();
     this.setupEventListeners();
   }
