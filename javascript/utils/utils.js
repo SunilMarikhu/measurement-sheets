@@ -67,10 +67,5 @@ export function generateUniqueId(prefix) {
 
 // Function to get the correct icon path using absolute path
 export function getIconPath(iconName) {
-  // If on a subpage (like /projects/), use ../images/icons/
-  // If on root, use images/icons/
-  if (window.location.pathname.startsWith('/projects/')) {
-    return '../images/icons/' + iconName;
-  }
-  return 'images/icons/' + iconName;
+  return `${window.location.origin}/images/icons/${iconName}`;
 } 
