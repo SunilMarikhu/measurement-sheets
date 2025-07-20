@@ -26,18 +26,20 @@ export function exportCsv() {
     recordCounter++;
     mergedRow += headers.map(header => escapeCsvField(header)).join(',') + '\n';
 
+    const recordUnit = table.querySelector('.recordUnitSelect')?.selectedOptions[0]?.textContent || '';
     const subRecords = table.querySelectorAll('tr.subRecord, tr.innerRecord');
     subRecords.forEach((subRecord) => {
       const cells = subRecord.children;
       const sn         = cells[0].textContent;
       const description = cells[1].querySelector('input')?.value || '';
-      const nos        = cells[2].querySelector('input')?.value || '';
+      let nos        = cells[2].querySelector('input')?.value || '';
       const length     = cells[3].querySelector('input')?.value || '';
       const width      = cells[4].querySelector('input')?.value || '';
       const height     = cells[5].querySelector('input')?.value || '';
       let quantity = cells[6].textContent;
       if (subRecord.classList.contains('innerRecord')) {
         quantity = '-' + quantity;
+        nos = '-' + nos;
       }
       mergedRow += [
         escapeCsvField(sn),

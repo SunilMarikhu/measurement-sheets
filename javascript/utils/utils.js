@@ -1,4 +1,4 @@
-import { SUB_RECORD_NUM } from './constants.js';
+import { SUB_RECORD_NUM, REPO_NAME } from './constants.js';
 
 
 export function calculateVolume(length, width, height) {
@@ -67,5 +67,7 @@ export function generateUniqueId(prefix) {
 
 // Function to get the correct icon path using absolute path
 export function getIconPath(iconName) {
-  return `${window.location.origin}/images/icons/${iconName}`;
+  const isGithubPages = window.location.hostname.includes('github.io');
+  const repoSegment = isGithubPages ? `/${REPO_NAME}` : '';
+  return `${window.location.origin}${repoSegment}/images/icons/${iconName}`;
 } 

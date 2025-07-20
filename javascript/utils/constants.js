@@ -1,3 +1,5 @@
+export const REPO_NAME = "measurement-sheets";
+
 export const SUB_RECORD_NUM = "sub-record-num";
 
 export const cellLabels = [
@@ -27,7 +29,8 @@ export const headers = [
   'Length',
   'Width',
   'Height',
-  'Quantity'
+  'Quantity',
+  'Unit'
 ];
 
 export const unitOptions = [
