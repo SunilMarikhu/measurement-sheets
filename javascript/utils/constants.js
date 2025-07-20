@@ -1,3 +1,5 @@
+export const REPO_NAME = "measurement-sheets";
+
 export const SUB_RECORD_NUM = "sub-record-num";
 
 export const cellLabels = [
