@@ -71,5 +71,5 @@ export function getIconPath(iconName) {
   const baseUrl = window.location.origin;
   
   // Construct absolute path to images/icons
-  return `${baseUrl}/images/icons/${iconName}`;
+  return `${baseUrl}images/icons/${iconName}`;
 } 
