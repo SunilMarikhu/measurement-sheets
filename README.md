@@ -24,33 +24,60 @@ A web-based application for creating and managing measurement records with suppo
 
 ### Usage
 
-1. **Add New Record**: Click the "Add New Record" button to create a new measurement block
-2. **Set Record Title**: Each record can have a custom title (defaults to Record-1, Record-2, etc.)
-3. **Choose Units**: Select the appropriate unit of measurement for each record
-4. **Add Measurements**: Click "Add Measurement" within each record to add measurement rows
-5. **Enter Dimensions**: Fill in the length, width, and height values
-6. **View Calculations**: Areas and totals are calculated automatically
-7. **Export Data**: Use the "Export CSV" button to download all measurement data
+1. **Start at Main Page**: Open `index.html` to see the welcome page
+2. **Access Projects**: Click "Get Started" to go to the projects listing page
+3. **Create Project**: Click "New Project" to create a new measurement project
+4. **Edit Project**: Click on a project card to open the project detail page
+5. **Add Records**: Use "Add New Record" to create measurement blocks
+6. **Set Record Title**: Each record can have a custom title (defaults to Record-1, Record-2, etc.)
+7. **Choose Units**: Select the appropriate unit of measurement for each record
+8. **Add Measurements**: Click "Add Measurement" within each record to add measurement rows
+9. **Enter Dimensions**: Fill in the length, width, and height values
+10. **Save Project**: Click the "Save Project" button to persist your changes
+11. **Export Data**: Use the "Export CSV" button to download all measurement data
 
 ## 📁 Project Structure
 
 ```
 measurement-sheets/
-├── css/
-│   └── index.css          # Styles for the application
-├── icons/
-│   ├── delete.png         # Delete icon
-│   └── trash_icon.svg     # Trash icon
-├── javascript/
-│   ├── constants.js       # Application constants and labels
-│   ├── exportCsv.js       # CSV export functionality
-│   ├── index.js           # Main application logic
-│   ├── utils.js           # Utility functions
-│   └── records/
+├── backend/               # API Backend
+│   ├── package.json       # Backend dependencies
+│   ├── server.js          # Express.js server
+│   ├── README.md          # Backend documentation
+│   └── data/              # Data storage (auto-created)
+│       └── projects.json  # Project data
+├── projects/              # Project Management
+│   ├── index.html         # Projects listing page
+│   ├── show.html          # Project detail page
+│   └── projectsIndex.js   # Projects listing logic
+├── css/                   # Stylesheets
+│   ├── layouts/           # Layout styles
+│   │   ├── index.css      # Main layout styles
+│   │   └── welcome.css    # Welcome page styles
+│   ├── components/        # Component styles
+│   │   ├── navigation.css # Navigation bar styles
+│   │   ├── project-manager.css # Project management styles
+│   │   └── projects-listing.css # Projects listing styles
+│   └── utilities/         # Utility styles (empty)
+├── javascript/            # JavaScript modules
+│   ├── api/               # API services
+│   │   └── api.js         # API service module
+│   ├── components/        # UI components
+│   │   ├── index.js       # Main application logic
+│   │   └── projectManager.js # Project management logic
+│   ├── utils/             # Utility functions
+│   │   ├── constants.js   # Application constants
+│   │   ├── utils.js       # Utility functions
+│   │   └── exportCsv.js   # CSV export functionality
+│   └── records/           # Record management
 │       ├── addRecord.js   # Add new record functionality
 │       ├── addSubRecord.js # Add measurement rows
 │       └── removeRow.js   # Remove measurement rows
-└── index.html             # Main HTML file
+├── images/                # Application images
+│   └── icons/            # Application icons
+├── index.html             # Main entry point
+├── README.md              # Main documentation
+└── SETUP.md              # Setup guide
 ```
 
 ## 🛠️ Development

@@ -1,89 +1,71 @@
-import { cellLabels, dimensionCellLabels, unitOptions } from '../constants.js';
+import { cellLabels, dimensionCellLabels, unitOptions } from '../utils/constants.js';
 import { addSubRecord } from './addSubRecord.js';
-import { generateUniqueId } from '../utils.js';
+import { generateUniqueId, getIconPath } from '../utils/utils.js';
 
 let recordsCount = 0;
 
-export function addRecord() {
-  recordsCount++;
+function createRecordTable({ title = '', unit = '', onDelete, onAddMeasurement }) {
+  // Create table
+  const table = document.createElement('table');
+  table.className = 'table table-bordered table-hover align-middle my-1 table-compact';
 
-  const newDiv = document.createElement('div');
-  newDiv.id = `project-${recordsCount}`;
-  const addSubBtn = document.createElement('button');
-  addSubBtn.textContent = 'Add Measurement';
-  addSubBtn.classList.add('addSubRecordBtn');
-
-  const deleteRecordBtn = document.createElement('button');
-  deleteRecordBtn.innerHTML = '<img src="icons/delete.png" class="icons delete-icon">';
-  deleteRecordBtn.classList.add('deleteRecordBtn');
-
-  const recordTable = document.createElement('table');
-
-  // Header
-  const headerRow = recordTable.insertRow(0);
+  // Header row
+  const headerRow = table.insertRow(0);
   headerRow.classList.add('table-header');
-  const headerCell1 = headerRow.insertCell(0);
+  const titleCell = headerRow.insertCell(0);
   const unitCell = headerRow.insertCell(1);
-  const headerCell2 = headerRow.insertCell(2);
+  const actionsCell = headerRow.insertCell(2);
 
-  headerCell1.colSpan = cellLabels.length; // exclude Unit column
-  headerCell1.style.textAlign = 'left';
+  titleCell.colSpan = cellLabels.length;
+  titleCell.style.textAlign = 'left';
 
-  // Create title input
-  const recordNameInput = document.createElement('input');
-  recordNameInput.type = 'text';
-  recordNameInput.classList.add('recordTitleInput');
-  recordNameInput.placeholder = `Record-${recordsCount}`;
-  recordNameInput.id = generateUniqueId('recordTitle');
-  recordNameInput.style.width = '100%';
-  recordNameInput.style.maxWidth = '99%';
-  recordNameInput.style.marginRight = '10px';
+  // Title input
+  const titleInput = document.createElement('input');
+  titleInput.type = 'text';
+  titleInput.className = 'recordTitleInput form-control form-control-sm';
+  titleInput.placeholder = title || `Record-${recordsCount}`;
+  titleInput.id = generateUniqueId('recordTitle');
+  titleInput.style.width = '100%';
+  titleInput.style.maxWidth = '99%';
+  titleInput.style.marginRight = '10px';
+  titleInput.value = title;
 
   const titleWrapper = document.createElement('div');
-  titleWrapper.classList.add('recordTitleWrapper');
-  titleWrapper.appendChild(recordNameInput);
-  headerCell1.appendChild(titleWrapper);
+  titleWrapper.className = 'recordTitleWrapper';
+  titleWrapper.appendChild(titleInput);
+  titleCell.appendChild(titleWrapper);
 
-  // Create unit select
+  // Unit select
   const unitSelect = document.createElement('select');
-  unitSelect.classList.add('recordUnitSelect');
-
+  unitSelect.className = 'recordUnitSelect form-select form-select-sm';
+  unitSelect.style.minWidth = '90px';
   unitOptions.forEach(opt => {
     const optionEl = document.createElement('option');
     optionEl.value = opt.value;
     optionEl.textContent = opt.label;
     unitSelect.appendChild(optionEl);
   });
-
-  // unitCell styling
+  if (unit) unitSelect.value = unit;
   unitCell.style.textAlign = 'center';
   unitCell.style.verticalAlign = 'middle';
   unitCell.style.width = '1%';
   unitCell.style.whiteSpace = 'nowrap';
   unitCell.appendChild(unitSelect);
 
-  headerCell2.style.textAlign = 'right';
-  headerCell2.style.verticalAlign = 'middle';
-  headerCell2.style.width = '1%';
-  headerCell2.appendChild(deleteRecordBtn);
+  // Delete button
+  const deleteBtn = document.createElement('button');
+  deleteBtn.innerHTML = `<img src="${getIconPath('delete.png')}" class="icons delete-icon">`;
+  deleteBtn.className = 'deleteRecordBtn';
+  actionsCell.style.textAlign = 'right';
+  actionsCell.style.verticalAlign = 'middle';
+  actionsCell.style.width = '1%';
+  actionsCell.appendChild(deleteBtn);
+  if (onDelete) deleteBtn.addEventListener('click', onDelete);
 
-  // Place in DOM
-  const container = document.getElementById('recordTablesContainer');
-  container.prepend(newDiv);
-  newDiv.appendChild(recordTable);
-  newDiv.appendChild(addSubBtn);
-
-  // Delete record
-  deleteRecordBtn.addEventListener('click', () => {
-    if (confirm('Are you sure you want to delete this measurement block?')) {
-      newDiv.remove();
-    }
-  });
-
-  // Column headers
-  const headerRow2 = recordTable.insertRow(1);
+  // Column headers row
+  const headerRow2 = table.insertRow(1);
   for (let i = 0; i < cellLabels.length; i++) {
-    if (cellLabels[i] === 'Unit') continue; // skip Unit label in row2
+    if (cellLabels[i] === 'Unit') continue;
     const cell = headerRow2.insertCell(-1);
     cell.textContent = cellLabels[i];
     if (cellLabels[i] === 'Dimensions') {
@@ -95,38 +77,123 @@ export function addRecord() {
   }
 
   // Dimension labels row
-  const dimensionRow = recordTable.insertRow(2);
+  const dimensionRow = table.insertRow(2);
   for (let i = 0; i < dimensionCellLabels.length; i++) {
     const cell = dimensionRow.insertCell(i);
     cell.textContent = dimensionCellLabels[i];
   }
 
-  // Footer (sub-total)
-  const footerRow = recordTable.insertRow(3);
+  // Footer row
+  const footerRow = table.insertRow(3);
   footerRow.classList.add('table-footer');
-  const footerCell1 = footerRow.insertCell(0);
-  const footerCell2 = footerRow.insertCell(1);
-  const footerUnitCell = footerRow.insertCell(2);
-  footerCell1.textContent = 'Sub-Total';
-  footerCell2.textContent = '0';
-  footerCell1.colSpan = 6;
-  footerCell2.classList.add('recordTotal');
-  footerUnitCell.classList.add('footerUnit');
+  // Add Measurement button
+  const addMeasurementBtn = document.createElement('button');
+  addMeasurementBtn.textContent = 'Add Measurement';
+  addMeasurementBtn.className = 'btn btn-outline-success';
+  if (onAddMeasurement) addMeasurementBtn.addEventListener('click', onAddMeasurement);
+  const addBtnCell = footerRow.insertCell(0);
+  addBtnCell.appendChild(addMeasurementBtn);
+  addBtnCell.colSpan = 3;
+  addBtnCell.classList.add('text-start');
+  // Sub-Total label
+  const subTotalLabelCell = footerRow.insertCell(1);
+  subTotalLabelCell.textContent = 'Sub-Total';
+  subTotalLabelCell.colSpan = 3;
+  // Sub-Total value
+  const subTotalValueCell = footerRow.insertCell(2);
+  subTotalValueCell.className = 'recordTotal';
+  subTotalValueCell.textContent = '0';
+  // Footer unit
+  const footerUnitCell = footerRow.insertCell(3);
+  footerUnitCell.className = 'footerUnit';
 
-  // Function to update footer unit text
+  // Update footer unit text
   const updateFooterUnit = () => {
     const selectedOption = unitSelect.options[unitSelect.selectedIndex];
     footerUnitCell.textContent = selectedOption.label;
   };
-
-  // Set initial unit text and add change listener
   updateFooterUnit();
   unitSelect.addEventListener('change', updateFooterUnit);
 
-  // Add first sub-record button
-  addSubBtn.addEventListener('click', function () {
-    addSubRecord(this, recordTable, false);
+  return {
+    table,
+    addMeasurementBtn,
+    deleteBtn,
+    titleInput,
+    unitSelect,
+    footerUnitCell,
+  };
+}
+
+function populateSubRecords(table, subRecords) {
+  if (!Array.isArray(subRecords)) return;
+  subRecords.forEach(subRecord => {
+    // Insert before the footer
+    const footerRow = table.querySelector('.table-footer');
+    const rowIndex = footerRow ? footerRow.rowIndex : table.rows.length;
+    const isLessRecord = !!subRecord.isLessRecord;
+    addSubRecord({ closest: () => table }, table, isLessRecord, rowIndex);
+    const newRow = table.rows[rowIndex];
+    if (!newRow) return;
+    // Fill in the data
+    const cells = newRow.children;
+    // cells[0] is serial number or dash
+    cells[1].querySelector('input').className = 'form-control form-control-sm px-2 py-1';
+    cells[2].querySelector('input').className = 'form-control form-control-sm px-2 py-1';
+    cells[3].querySelector('input').className = 'form-control form-control-sm px-2 py-1';
+    cells[4].querySelector('input').className = 'form-control form-control-sm px-2 py-1';
+    cells[5].querySelector('input').className = 'form-control form-control-sm px-2 py-1';
+    // cells[6] is quantity (auto-calculated)
   });
 }
 
-// No global exposure needed 
+export function addRecord() {
+  recordsCount++;
+  const recordContainer = document.createElement('div');
+  recordContainer.id = `project-${recordsCount}`;
+  const onDelete = () => {
+    if (confirm('Are you sure you want to delete this measurement block?')) {
+      recordContainer.remove();
+    }
+  };
+  const { table, addMeasurementBtn } = createRecordTable({
+    title: '',
+    unit: '',
+    onDelete,
+    onAddMeasurement: function () {
+      addSubRecord(this, table, false);
+    },
+  });
+  const container = document.getElementById('recordTablesContainer');
+  container.prepend(recordContainer);
+  recordContainer.appendChild(table);
+}
+
+export function addRecordFromData(recordData) {
+  recordsCount++;
+  const recordContainer = document.createElement('div');
+  recordContainer.id = `project-${recordsCount}`;
+  const onDelete = () => {
+    if (confirm('Are you sure you want to delete this measurement block?')) {
+      recordContainer.remove();
+    }
+  };
+  const { table, addMeasurementBtn, unitSelect, titleInput } = createRecordTable({
+    title: recordData.title || '',
+    unit: recordData.unit || '',
+    onDelete,
+    onAddMeasurement: function () {
+      addSubRecord(this, table, false);
+    },
+  });
+  const container = document.getElementById('recordTablesContainer');
+  container.prepend(recordContainer);
+  recordContainer.appendChild(table);
+  // Set initial values if provided
+  if (recordData.title) titleInput.value = recordData.title;
+  if (recordData.unit) unitSelect.value = recordData.unit;
+  // Add sub-records from data
+  if (recordData.subRecords && Array.isArray(recordData.subRecords)) {
+    populateSubRecords(table, recordData.subRecords);
+  }
+} 

@@ -1,5 +1,5 @@
-import { SUB_RECORD_NUM, cellContents } from '../constants.js';
-import { updateSubTotal, updateSerialNum, getNewRowIndex, updateTotal, generateUniqueId } from '../utils.js';
+import { SUB_RECORD_NUM, cellContents } from '../utils/constants.js';
+import { updateSerialNum, getNewRowIndex, updateTotal, generateUniqueId, getIconPath } from '../utils/utils.js';
 import { removeRow } from './removeRow.js';
 
 export function addSubRecord(element, recordTable, isLessRecord = false, targetRowIndex = undefined) {
@@ -40,32 +40,43 @@ export function addSubRecord(element, recordTable, isLessRecord = false, targetR
     subRecordCount++;
     cell0.textContent = `${subRecordCount}.`;
     cell0.classList.add('serialNumber');
-    lastCell.innerHTML = '<button class="addInnerRecordBtn"> + Less</button>';
+    lastCell.innerHTML = '<button class="btn btn-sm btn-outline-secondary w-auto text-nowrap addInnerRecordBtn"> + Less</button>';
   } else {
     cell0.textContent = '-';
   }
-  lastCell.innerHTML += '<button class="deleteSubRecordBtn"><img src="icons/delete.png" class="icons delete-icon"></button>';
+  lastCell.innerHTML += `<button class="btn btn-sm btn-danger ms-1"><img src="${getIconPath('delete.png')}" class="icons delete-icon"></button>`;
   lastCell.classList.add('lastCol');
 
   // Event handlers
-  subRecordRow.querySelector('.addInnerRecordBtn')?.addEventListener('click', function () {
-    addSubRecord(this, recordTable, true, getNewRowIndex(this.closest('tr')));
-  });
+  const addInnerBtn = subRecordRow.querySelector('.addInnerRecordBtn');
+  if (addInnerBtn) {
+    addInnerBtn.addEventListener('click', function () {
+      addSubRecord(this, recordTable, true, getNewRowIndex(this.closest('tr')));
+    });
+  }
 
-  subRecordRow.querySelector('.deleteSubRecordBtn').addEventListener('click', function () {
-    if (confirm('Are you sure to delete this record?')) {
-      removeRow(this.closest('tr'));
-    }
-  });
+  const deleteBtn = subRecordRow.querySelector('.deleteSubRecordBtn');
+  if (deleteBtn) {
+    deleteBtn.addEventListener('click', function () {
+      if (confirm('Are you sure to delete this record?')) {
+        removeRow(this.closest('tr'));
+      }
+    });
+  }
 
-  subRecordRow.querySelector('input[name="height"]').addEventListener('keydown', function (event) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      addSubRecord(this, recordTable, isLessRecord, getNewRowIndex(this.closest('tr')));
-    }
-  });
+  const heightInput = subRecordRow.querySelector('input[name="height"]');
+  if (heightInput) {
+    heightInput.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        addSubRecord(this, recordTable, isLessRecord, getNewRowIndex(this.closest('tr')));
+      }
+    });
+  }
 
-  subRecordRow.querySelector('input[name="description"]').focus();
+  const descInput = subRecordRow.querySelector('input[name="description"]');
+  if (descInput) descInput.focus();
+
   if (targetRowIndex !== undefined && !isLessRecord) updateSerialNum(recordTable);
 
   // Attach keyup listeners to inputs for dynamic total updates

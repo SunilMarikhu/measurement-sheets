@@ -1,5 +1,5 @@
-import { SUB_RECORD_NUM } from '../constants.js';
-import { updateSubTotal, updateSerialNum } from '../utils.js';
+import { SUB_RECORD_NUM } from '../utils/constants.js';
+import { updateSubTotal, updateSerialNum } from '../utils/utils.js';
 
 export function removeRow(row) {
   const table = row.closest('table');

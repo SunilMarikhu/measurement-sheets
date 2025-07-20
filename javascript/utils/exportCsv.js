@@ -38,7 +38,10 @@ export function exportCsv() {
       const length     = cells[3].firstChild.value;
       const width      = cells[4].firstChild.value;
       const height     = cells[5].firstChild.value;
-      const quantity   = (subRecord.classList.contains('innerRecord') ? '-' : '') + cells[6].textContent;
+      let quantity = cells[6].textContent;
+      if (subRecord.classList.contains('innerRecord')) {
+        quantity = '-' + quantity;
+      }
 
       mergedRow += [
         escapeCsvField(sn),
