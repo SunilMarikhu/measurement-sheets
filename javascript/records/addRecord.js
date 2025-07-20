@@ -4,10 +4,13 @@ import { generateUniqueId, getIconPath } from '../utils/utils.js';
 
 let recordsCount = 0;
 
-function createRecordTable({ title = '', unit = '', onDelete, onAddMeasurement }) {
+function createRecordTable({ title = '', unit = '', onDelete, onAddMeasurement, recordId }) {
   // Create table
   const table = document.createElement('table');
   table.className = 'table table-bordered table-hover align-middle my-1 table-compact';
+  if (recordId) {
+    table.dataset.recordId = recordId;
+  }
 
   // Header row
   const headerRow = table.insertRow(0);
@@ -132,23 +135,32 @@ function populateSubRecords(table, subRecords) {
     const footerRow = table.querySelector('.table-footer');
     const rowIndex = footerRow ? footerRow.rowIndex : table.rows.length;
     const isLessRecord = !!subRecord.isLessRecord;
-    addSubRecord({ closest: () => table }, table, isLessRecord, rowIndex);
+    // Pass subRecord.id to addSubRecord
+    addSubRecord({ closest: () => table }, table, isLessRecord, rowIndex, subRecord.id);
     const newRow = table.rows[rowIndex];
     if (!newRow) return;
+    // Set the id as data-subrecord-id if present
+    if (subRecord.id) newRow.dataset.subrecordId = subRecord.id;
     // Fill in the data
     const cells = newRow.children;
     // cells[0] is serial number or dash
+    if (cells[1].querySelector('input')) cells[1].querySelector('input').value = subRecord.description || '';
+    if (cells[2].querySelector('input')) cells[2].querySelector('input').value = subRecord.nos || '';
+    if (cells[3].querySelector('input')) cells[3].querySelector('input').value = subRecord.length || '';
+    if (cells[4].querySelector('input')) cells[4].querySelector('input').value = subRecord.width || '';
+    if (cells[5].querySelector('input')) cells[5].querySelector('input').value = subRecord.height || '';
+    // cells[6] is quantity (auto-calculated)
     cells[1].querySelector('input').className = 'form-control form-control-sm px-2 py-1';
     cells[2].querySelector('input').className = 'form-control form-control-sm px-2 py-1';
     cells[3].querySelector('input').className = 'form-control form-control-sm px-2 py-1';
     cells[4].querySelector('input').className = 'form-control form-control-sm px-2 py-1';
     cells[5].querySelector('input').className = 'form-control form-control-sm px-2 py-1';
-    // cells[6] is quantity (auto-calculated)
   });
 }
 
 export function addRecord() {
   recordsCount++;
+  const recordId = generateUniqueId('record');
   const recordContainer = document.createElement('div');
   recordContainer.id = `project-${recordsCount}`;
   const onDelete = () => {
@@ -163,6 +175,7 @@ export function addRecord() {
     onAddMeasurement: function () {
       addSubRecord(this, table, false);
     },
+    recordId
   });
   const container = document.getElementById('recordTablesContainer');
   container.prepend(recordContainer);
@@ -171,6 +184,7 @@ export function addRecord() {
 
 export function addRecordFromData(recordData) {
   recordsCount++;
+  const recordId = recordData.id || generateUniqueId('record');
   const recordContainer = document.createElement('div');
   recordContainer.id = `project-${recordsCount}`;
   const onDelete = () => {
@@ -185,6 +199,7 @@ export function addRecordFromData(recordData) {
     onAddMeasurement: function () {
       addSubRecord(this, table, false);
     },
+    recordId
   });
   const container = document.getElementById('recordTablesContainer');
   container.prepend(recordContainer);

@@ -1,5 +1,5 @@
-// const API_BASE_URL = 'http://localhost:3000/api';
-const API_BASE_URL = 'https://measurement-sheets-backend.onrender.com/api';
+const API_BASE_URL = 'http://localhost:3000/api';
+// const API_BASE_URL = 'https://measurement-sheets-backend.onrender.com/api';
 
 class ProjectAPI {
   constructor() {
@@ -84,11 +84,12 @@ class ProjectAPI {
       const recordTitle = table.querySelector('.recordTitleInput')?.value || `Record-${index + 1}`;
       const recordUnit = table.querySelector('.recordUnitSelect')?.value || '';
       const subRecords = [];
-      
-      table.querySelectorAll('tr.subRecord, tr.innerRecord').forEach((subRecord) => {
+      const recordId = table.dataset.recordId || '';
+      table.querySelectorAll('tr.subRecord, tr.innerRecord').forEach((subRecord, subIndex) => {
         const cells = subRecord.children;
         const subRecordData = {
-          sn: cells[0].textContent,
+          id: parseInt(subRecord.dataset.subrecordId, 10) || subIndex + 1,
+          sn: subIndex + 1,
           description: cells[1].firstChild?.value || '',
           nos: cells[2].firstChild?.value || '',
           length: cells[3].firstChild?.value || '',
@@ -99,10 +100,9 @@ class ProjectAPI {
         };
         subRecords.push(subRecordData);
       });
-      
       const subTotal = table.querySelector('td.recordTotal')?.textContent || '0';
-      
       records.push({
+        id: recordId,
         title: recordTitle,
         unit: recordUnit,
         subRecords,
