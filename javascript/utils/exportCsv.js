@@ -5,9 +5,7 @@ function escapeCsvField(field) {
   if (field === null || field === undefined) {
     return '""';
   }
-  
   const stringField = String(field);
-  
   // Always escape quotes by doubling them and wrap in quotes
   const escapedField = stringField.replace(/"/g, '""');
   return `"${escapedField}"`;
@@ -20,7 +18,7 @@ export function exportCsv() {
 
   const projectName = document.querySelector('input[name="projectName"]').value.trim() || 'New_Project';
   mergedRow += [escapeCsvField(''), escapeCsvField(projectName), '\n'].join(',');
-  mergedRow += [escapeCsvField(''), escapeCsvField(document.querySelector('textArea[name="projectDetails"]').value), '\n\n'].join(',');
+  mergedRow += [escapeCsvField(''), escapeCsvField(document.querySelector('textarea[name="projectDetails"]').value), '\n\n'].join(',');
 
   tables.forEach((table) => {
     const recordTitle = table.querySelector('.recordTitleInput')?.value.trim() || `Record-${recordCounter}`;
@@ -28,26 +26,23 @@ export function exportCsv() {
     recordCounter++;
     mergedRow += headers.map(header => escapeCsvField(header)).join(',') + '\n';
 
-    const recordUnit = table.querySelector('.recordUnitSelect')?.value || '';
     const subRecords = table.querySelectorAll('tr.subRecord, tr.innerRecord');
     subRecords.forEach((subRecord) => {
       const cells = subRecord.children;
       const sn         = cells[0].textContent;
-      const description = cells[1].firstChild.value;
-      const nos        = cells[2].firstChild.value;
-      const length     = cells[3].firstChild.value;
-      const width      = cells[4].firstChild.value;
-      const height     = cells[5].firstChild.value;
+      const description = cells[1].querySelector('input')?.value || '';
+      const nos        = cells[2].querySelector('input')?.value || '';
+      const length     = cells[3].querySelector('input')?.value || '';
+      const width      = cells[4].querySelector('input')?.value || '';
+      const height     = cells[5].querySelector('input')?.value || '';
       let quantity = cells[6].textContent;
       if (subRecord.classList.contains('innerRecord')) {
         quantity = '-' + quantity;
       }
-
       mergedRow += [
         escapeCsvField(sn),
         escapeCsvField(description),
         escapeCsvField(nos),
-        escapeCsvField(recordUnit),
         escapeCsvField(length),
         escapeCsvField(width),
         escapeCsvField(height),
@@ -57,10 +52,12 @@ export function exportCsv() {
     });
 
     const subTotal = table.querySelector('td.recordTotal').textContent;
+    const footerUnit = table.querySelector('.footerUnit')?.textContent || '';
     mergedRow += [
-      ...Array(6).map(() => escapeCsvField(' ')),
+      ...Array(5).fill(escapeCsvField(' ')),
       escapeCsvField('Sub-Total'),
       escapeCsvField(subTotal),
+      escapeCsvField(footerUnit),
       '\n'
     ].join(',');
   });

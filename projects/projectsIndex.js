@@ -1,4 +1,5 @@
 import { projectAPI } from '../javascript/api/api.js';
+import { getIconPath } from '../javascript/utils/utils.js';
 
 class ProjectsIndex {
   constructor() {
@@ -107,7 +108,7 @@ class ProjectsIndex {
           </button>
           <div class="menu-dropdown" data-project-id="${project.id}">
             <button class="menu-item delete-item" data-project-id="${project.id}">
-              <img src="../images/icons/delete.png" class="delete-icon" alt="Delete">
+              <img src="${getIconPath('delete.png')}" class="delete-icon" alt="Delete">
               Delete Project
             </button>
           </div>
