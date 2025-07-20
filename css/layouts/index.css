@@ -336,3 +336,71 @@ td select {
     width: 1%;
     white-space: nowrap;
 }
+
+/* Feature cards on home page */
+.features .project-card {
+  border-radius: 14px;
+  background: #fff;
+  transition: box-shadow 0.3s, border-color 0.3s, background 0.3s, transform 0.3s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 16px;
+}
+.features .project-card:hover {
+  background: #bfcf8c;
+  box-shadow: 0 12px 24px rgba(25, 118, 210, 0.13);
+  transform: scaleX(1.2) scaleY(1.1);
+  z-index: 2;
+}
+
+/* Home page layout and compact styles */
+.page-container {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.main-content h1 {
+  font-size: 2rem;
+  margin-bottom: 0.3em;
+}
+.main-desc {
+  max-width: 400px;
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 0.7em;
+}
+.go-projects-btn {
+  margin-top: 0.5rem;
+  padding: 6px 18px;
+  font-size: 1rem;
+  min-width: 0;
+  border-radius: 6px;
+}
+.features {
+  margin: 20px;
+  padding: 0.7rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  max-width: 1200px;
+  grid-template-rows: repeat(2, auto);
+  gap: 1.1rem;
+  justify-items: center;
+  align-items: stretch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.primary-btn {
+  text-decoration: none;
+  padding: 12px 36px;
+  font-size: 0.97rem;
+  border-radius: 5px;
+  border: 1px solid blue;
+  min-width: 0;
+  margin-top: 0.5rem;
+}

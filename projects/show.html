@@ -9,20 +9,22 @@
     <link rel="stylesheet" type="text/css" href="/css/components/project-manager.css">
     <link rel="stylesheet" type="text/css" href="/css/components/project-show.css">
     <link rel="stylesheet" type="text/css" href="/css/components/navigation.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
 </head>
 
-<body>
+<body class="container-fluid d-flex flex-column gap-4 p-0">
     <!-- Navigation Bar -->
     <nav class="navbar">
-        <div class="nav-container">
-            <a href="/projects/index.html" class="nav-brand">
-                <img src="/images/icons/back.svg" alt="Back" class="nav-brand-icon"></a>
-            <h1 id="projectTitle" class="nav-title">Measurement Sheet</h1>
-            <button id="saveProjectBtn" class="btn save-btn">Save Project</button>
+        <div class="nav-container d-flex align-items-center justify-content-between w-100 gap-3">
+            <a href="/projects/index.html" class="nav-brand d-inline-flex align-items-center justify-content-center rounded-circle p-2 bg-light back-btn-hover" tabindex="0">
+                <img src="/images/icons/back.svg" alt="Back" class="img-fluid back-btn-img">
+            </a>
+            <h1 id="projectTitle" class="nav-title text-start">Measurement Sheet</h1>
+            <button id="saveProjectBtn" class="btn save-btn ms-auto">Save Project</button>
         </div>
     </nav>
 
-    <div class="main-content">
+    <div class="container-fluid">
 
         <!-- Project Information -->
         <div class="project-details">
@@ -52,6 +54,17 @@
     <!-- Include the application entry point -->
     <script type="module" src="/javascript/components/index.js"></script>
     <script type="module" src="/javascript/components/projectManager.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <style>
+.back-btn-img {
+    width: 24px;
+    height: 24px;
+}
+.back-btn-hover:hover, .back-btn-hover:focus {
+    background: #e7f1ff !important;
+    outline: none;
+}
+</style>
 </body>
 
 </html>
